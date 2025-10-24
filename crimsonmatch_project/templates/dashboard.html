@@ -1,13 +1,115 @@
-<h1>Welcome, {{ user.username }}</h1>
-<h3>Other Vampires:</h3>
-<ul>
-  {% for u in users %}
-    <li>
-      🧛 {{ u.username }} 
-      <a href="{% url 'like_user' u.id %}">Like</a>
-    </li>
-  {% empty %}
-    <li>No other vampires around...</li>
-  {% endfor %}
-</ul>
-<a href="{% url 'matches' %}">View Matches</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CrimsonMatch Dashboard</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 30px;
+        }
+        h1, h3 {
+            color: #b30000;
+        }
+        .user-card {
+            display: inline-block;
+            border: 2px solid #b30000;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            background-color: #1a1a1a;
+            width: 200px;
+        }
+        .user-card:hover {
+            background-color: #262626;
+        }
+        .like-btn, .unlike-btn {
+            display: inline-block;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+        .like-btn {
+            background-color: #b30000;
+        }
+        .unlike-btn {
+            background-color: #555;
+        }
+        .nav-links {
+            margin-top: 20px;
+        }
+        .nav-links a {
+            color: #ff6666;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #b30000;
+            width: 200px;
+        }
+        button {
+            padding: 8px 15px;
+            border: none;
+            background-color: #b30000;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #800000;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome, {{ user.username }}</h1>
+
+    <div class="nav-links">
+        <a href="{% url 'matches' %}">💞 View Matches</a>
+        <a href="{% url 'notifications' %}">🔔 Notifications</a>
+        <a href="{% url 'logout' %}">🚪 Logout</a>
+    </div>
+
+    <div class="search-box">
+        <form method="get">
+            <input type="text" name="q" placeholder="Search other vampires..." value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <h3>Other Vampires Nearby:</h3>
+
+    {% if users %}
+        {% for u in users %}
+            <div class="user-card">
+                <p>🧛 <strong>{{ u.username }}</strong></p>
+
+                {% if u.profile.bio %}
+                    <p><em>{{ u.profile.bio|truncatechars:60 }}</em></p>
+                {% endif %}
+
+                {% if u.id in liked_users %}
+                    <a href="{% url 'unlike_user' u.id %}" class="unlike-btn">💔 Unlike</a>
+                {% else %}
+                    <a href="{% url 'like_user' u.id %}" class="like-btn">❤️ Like</a>
+                {% endif %}
+
+                <p><a href="{% url 'profile' u.id %}" style="color:#ff6666;">View Profile</a></p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No other vampires around... 🦇</p>
+    {% endif %}
+
+</body>
+</html>
