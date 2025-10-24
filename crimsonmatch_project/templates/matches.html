@@ -1,0 +1,9 @@
+<h2>Your Bloodmates 💕</h2>
+<ul>
+  {% for m in matches %}
+    <li>{{ m.username }}</li>
+  {% empty %}
+    <li>No matches yet. The night is young.</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'dashboard' %}">Back</a>

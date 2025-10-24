@@ -1,0 +1,13 @@
+<h1>Welcome, {{ user.username }}</h1>
+<h3>Other Vampires:</h3>
+<ul>
+  {% for u in users %}
+    <li>
+      🧛 {{ u.username }} 
+      <a href="{% url 'like_user' u.id %}">Like</a>
+    </li>
+  {% empty %}
+    <li>No other vampires around...</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'matches' %}">View Matches</a>
